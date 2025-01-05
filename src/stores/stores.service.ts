@@ -25,11 +25,20 @@ export class StoresService {
         const store = await this.findOneById(storeId);
 
         if(!store){
-            throw new Error('Loja não encontrada');
+            throw new Error(`Loja com ID ${storeId} não encontrada`);
         }
 
         Object.assign(store, attrs);
         return this.repo.save(store);
     }
 
+    async remove(storeId: string) { 
+        const store = await this.findOneById(storeId); 
+        
+        if (!store) { 
+            throw new Error(`Loja com ID ${storeId} não encontrada`); 
+        } 
+        
+        return this.repo.remove(store); 
+    }
 }
