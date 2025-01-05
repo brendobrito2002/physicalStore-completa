@@ -1,8 +1,10 @@
-import { Body, Controller, Post, Get, NotFoundException, Param} from '@nestjs/common';
+import { Body, Controller, Post, Get, NotFoundException, Param, Patch} from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dtos/create-store.dto';
 import { StoreResponseDto } from './dtos/store-response-dto';
+import { UpdateStoreDto } from './dtos/update-store-dto';
+import { brotliDecompress } from 'zlib';
 
 @Controller('stores')
 export class StoresController {
@@ -25,9 +27,15 @@ export class StoresController {
     const store = await this.storesService.findOneById(storeId);
 
     if (!store) {
-      throw new NotFoundException(`Store with ID ${storeId} not found`);
+      throw new NotFoundException(`Loja com ID: ${storeId} não encontrada`);
     }
 
+    return plainToInstance(StoreResponseDto, store);
+  }
+
+  @Patch('/:storeId')
+  async updateStore(@Param('storeId') storeId: string, @Body() body: UpdateStoreDto){
+    const store = await this.storesService.update(storeId, body);
     return plainToInstance(StoreResponseDto, store);
   }
 }

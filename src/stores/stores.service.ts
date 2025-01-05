@@ -21,4 +21,15 @@ export class StoresService {
         return this.repo.findOneBy({ storeId });
     }
     
+    async update(storeId: string, attrs: Partial<Store>){
+        const store = await this.findOneById(storeId);
+
+        if(!store){
+            throw new Error('Loja não encontrada');
+        }
+
+        Object.assign(store, attrs);
+        return this.repo.save(store);
+    }
+
 }
