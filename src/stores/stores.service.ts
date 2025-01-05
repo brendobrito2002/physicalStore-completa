@@ -13,4 +13,12 @@ export class StoresService {
         return this.repo.save(store);
     }
 
+    async findAll(): Promise<Store[]> {
+        return this.repo.find();
+    }
+
+    async findOneById(storeId: string): Promise<Store | null> {
+        return this.repo.findOneBy({ storeId });
+    }
+    
 }
