@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, AfterInsert, AfterUpdate, AfterRecover, AfterRemove } from "typeorm";
 import { IsString, IsBoolean, IsNumber, IsEmail } from "class-validator";
 
 @Entity()
@@ -57,11 +57,11 @@ export class Store {
 
     @IsString()
     @Column({ nullable: true })
-    address2: string;
+    address2: string | null;
 
     @IsString()
     @Column({ nullable: true })
-    address3: string;
+    address3: string | null;
 
     @IsBoolean()
     @Column({ default: true })
@@ -70,4 +70,19 @@ export class Store {
     @IsNumber()
     @Column("int")
     shippingTimeInDays: number; // considerar tempo de preparo
+
+    @AfterInsert()
+    logInsert() {
+        console.log('Inserido Loja com ID: ', this.storeId);
+    }
+
+    @AfterUpdate()
+    logUpdate() {
+        console.log('Atualizada Loja com ID: ', this.storeId);
+    }
+
+    @AfterRemove()
+    logRemove() {
+        console.log('Removida Loja com ID: ', this.storeId);
+    }
 }
