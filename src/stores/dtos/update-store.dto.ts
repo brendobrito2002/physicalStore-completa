@@ -4,19 +4,19 @@ import { StoreType } from "../stores.entity";
 export class UpdateStoreDto {
     @IsString()
     @IsOptional()
-    storeName: string;
+    storeName?: string;
 
     @IsString()
     @IsOptional()
-    city: string;
+    city?: string;
 
     @IsString()
     @IsOptional()
-    district: string; // bairro
+    district?: string; // bairro
 
     @IsString()
     @IsOptional()
-    state: string;
+    state?: string;
 
     @IsString()
     @IsEnum(StoreType, { message: 'O tipo deve ser PDV ou Loja' })
@@ -25,31 +25,31 @@ export class UpdateStoreDto {
 
     @IsString()
     @IsOptional()
-    country: string;
+    country?: string;
 
     @IsString()
     @IsOptional()
-    postalCode: string;
+    postalCode?: string;
 
     @IsString()
     @IsOptional()
-    telephoneNumber: string;
+    telephoneNumber?: string;
 
     @IsEmail()
     @IsOptional()
-    emailAddress: string;
+    emailAddress?: string;
 
     @IsString()
     @IsOptional()
-    latitude: string;
+    latitude?: string;
 
     @IsString()
     @IsOptional()
-    longitude: string;
+    longitude?: string;
 
     @IsString()
     @IsOptional()
-    address1: string;
+    address1?: string;
 
     @IsOptional()
     @IsString()
@@ -61,9 +61,9 @@ export class UpdateStoreDto {
 
     @IsBoolean()
     @IsOptional()
-    takeOutInStore: boolean; // sempre tem produto
+    takeOutInStore?: boolean; // sempre tem produto
 
     @IsNumber()
     @IsOptional()
-    shippingTimeInDays: number; // considerar tempo de preparo
+    shippingTimeInDays?: number; // considerar tempo de preparo
 }

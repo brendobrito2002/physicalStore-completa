@@ -2,6 +2,9 @@ import { Exclude, Expose, Transform } from 'class-transformer';
 import { StoreType } from '../stores.entity';
 
 export class StoreResponseDto {
+  @Expose() // @Exclude()
+  storeId: string;
+
   @Expose()
   storeName: string;
 
@@ -38,20 +41,15 @@ export class StoreResponseDto {
   @Expose()
   address1: string;
 
-  @Expose({ toPlainOnly: true })
-  @Transform(({ value }) => (value !== null ? value : undefined))
-  address2: string | null;
+  @Expose()
+  address2: string;
 
-  @Expose({ toPlainOnly: true })
-  @Transform(({ value }) => (value !== null ? value : undefined))
-  address3: string | null;
+  @Expose()
+  address3: string;
 
   @Expose()
   takeOutInStore: boolean;
 
   @Expose()
   shippingTimeInDays: number;
-
-  @Expose() // @Exclude()
-  storeId: string;
 }
