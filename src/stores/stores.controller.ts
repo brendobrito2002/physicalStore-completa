@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, NotFoundException, Param, Patch, Delete, UseInterceptors, ClassSerializerInterceptor, HttpCode} from '@nestjs/common';
+import { Body, Controller, Post, Get, NotFoundException, Param, Patch, Delete, HttpCode} from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dtos/create-store.dto';
 import { UpdateStoreDto } from './dtos/update-store.dto';
