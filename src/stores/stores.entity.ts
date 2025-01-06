@@ -1,5 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, AfterInsert, AfterUpdate, AfterRecover, AfterRemove } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, AfterInsert, AfterUpdate, AfterRemove } from "typeorm";
 import { IsString, IsBoolean, IsNumber, IsEmail } from "class-validator";
+
+export enum StoreType {
+    PDV = 'PDV',
+    LOJA = 'Loja',
+}
 
 @Entity()
 export class Store {
@@ -24,8 +29,8 @@ export class Store {
     state: string;
 
     @IsString()
-    @Column()
-    type: string; // PDV | Loja
+    @Column({ type: 'text' })
+    type: StoreType;
 
     @IsString()
     @Column()
