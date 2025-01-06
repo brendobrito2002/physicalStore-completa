@@ -1,4 +1,5 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
+import { StoreType } from '../stores.entity';
 
 export class StoreResponseDto {
   @Expose()
@@ -14,7 +15,7 @@ export class StoreResponseDto {
   state: string;
 
   @Expose()
-  type: string;
+  type: StoreType;
 
   @Expose()
   country: string;

@@ -1,4 +1,5 @@
-import { IsEmail, IsString, IsOptional, IsBoolean, IsNumber } from "class-validator";
+import { IsEmail, IsString, IsOptional, IsBoolean, IsNumber, IsEnum } from "class-validator";
+import { StoreType } from "../stores.entity";
 
 export class UpdateStoreDto {
     @IsString()
@@ -18,8 +19,9 @@ export class UpdateStoreDto {
     state: string;
 
     @IsString()
+    @IsEnum(StoreType, { message: 'O tipo deve ser PDV ou Loja' })
     @IsOptional()
-    type: string; // PDV | Loja
+    type?: StoreType; // PDV | Loja
 
     @IsString()
     @IsOptional()

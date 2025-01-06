@@ -1,4 +1,5 @@
-import { IsBoolean, IsEmail, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { StoreType } from "../stores.entity";
 
 export class CreateStoreDto {
     @IsString()
@@ -13,8 +14,8 @@ export class CreateStoreDto {
     @IsString()
     state: string;
 
-    @IsString()
-    type: string; // PDV | Loja
+    @IsEnum(StoreType, { message: 'O tipo deve ser PDV ou Loja' })
+    type: StoreType; // PDV | Loja
 
     @IsString()
     country: string;
