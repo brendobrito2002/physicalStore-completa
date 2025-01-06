@@ -33,7 +33,7 @@ export class Store {
     type: StoreType;
 
     @IsString()
-    @Column()
+    @Column({ default: 'Brasil' })
     country: string;
 
     @IsString()

@@ -6,19 +6,23 @@ export class CreateStoreDto {
     storeName: string;
 
     @IsString()
-    city: string;
+    @IsOptional()
+    city?: string;
 
     @IsString()
-    district: string; // bairro
+    @IsOptional()
+    district?: string; // bairro
 
     @IsString()
-    state: string;
+    @IsOptional()
+    state?: string;
 
     @IsEnum(StoreType, { message: 'O tipo deve ser PDV ou Loja' })
     type: StoreType; // PDV | Loja
 
     @IsString()
-    country: string;
+    @IsOptional()
+    country?: string;
 
     @IsString()
     postalCode: string;
@@ -36,7 +40,8 @@ export class CreateStoreDto {
     longitude: string;
 
     @IsString()
-    address1: string;
+    @IsOptional()
+    address1?: string;
 
     @IsOptional()
     @IsString()
@@ -47,7 +52,8 @@ export class CreateStoreDto {
     address3?: string;
 
     @IsBoolean()
-    takeOutInStore: boolean; // sempre tem produto
+    @IsOptional()
+    takeOutInStore?: boolean; // sempre tem produto
 
     @IsNumber()
     shippingTimeInDays: number; // considerar tempo de preparo
