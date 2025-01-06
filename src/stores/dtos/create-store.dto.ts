@@ -24,7 +24,7 @@ export class CreateStoreDto {
     postalCode: string;
 
     @IsString()
-    teleponeNumber: string;
+    telephoneNumber: string;
 
     @IsEmail()
     emailAddress: string;

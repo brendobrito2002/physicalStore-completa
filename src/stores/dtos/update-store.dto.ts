@@ -33,7 +33,7 @@ export class UpdateStoreDto {
 
     @IsString()
     @IsOptional()
-    teleponeNumber: string;
+    telephoneNumber: string;
 
     @IsEmail()
     @IsOptional()
@@ -60,6 +60,7 @@ export class UpdateStoreDto {
     address3?: string;
 
     @IsBoolean()
+    @IsOptional()
     takeOutInStore: boolean; // sempre tem produto
 
     @IsNumber()

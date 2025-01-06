@@ -1,9 +1,8 @@
-import { Body, Controller, Post, Get, NotFoundException, Param, Patch, Delete} from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
+import { Body, Controller, Post, Get, NotFoundException, Param, Patch, Delete, UseInterceptors, ClassSerializerInterceptor} from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dtos/create-store.dto';
-import { StoreResponseDto } from './dtos/store-response-dto';
-import { UpdateStoreDto } from './dtos/update-store-dto';
+import { UpdateStoreDto } from './dtos/update-store.dto';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 
 @Controller('stores')
 export class StoresController {
@@ -12,15 +11,16 @@ export class StoresController {
     @Post('/create')
     async createStore(@Body() createStoreDto: CreateStoreDto) {
         const store = await this.storesService.create(createStoreDto);
-        return plainToInstance(StoreResponseDto, store);
+        return store;
     }
 
     @Get('/')
     async findAllStore() {
         const stores = await this.storesService.findAll();
-        return plainToInstance(StoreResponseDto, stores);
+        return stores;
     }
 
+    @UseInterceptors(SerializeInterceptor)
     @Get('/:storeId')
     async findOneStoreById(@Param('storeId') storeId: string) {
         const store = await this.storesService.findOneById(storeId);
@@ -29,13 +29,13 @@ export class StoresController {
         throw new NotFoundException(`Loja com ID: ${storeId} não encontrada`);
         }
 
-        return plainToInstance(StoreResponseDto, store);
+        return store;
     }
 
     @Patch('/:storeId')
     async updateStore(@Param('storeId') storeId: string, @Body() body: UpdateStoreDto){
         const store = await this.storesService.update(storeId, body);
-        return plainToInstance(StoreResponseDto, store);
+        return store;
     }
 
     @Delete('/:storeId') 

@@ -24,7 +24,7 @@ export class StoreResponseDto {
   postalCode: string;
 
   @Expose()
-  teleponeNumber: string;
+  telephoneNumber: string;
 
   @Expose()
   emailAddress: string;
