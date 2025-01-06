@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './stores.entity';
@@ -25,7 +25,7 @@ export class StoresService {
         const store = await this.findOneById(storeId);
 
         if(!store){
-            throw new Error(`Loja com ID ${storeId} não encontrada`);
+            throw new NotFoundException(`Loja com ID ${storeId} não encontrada`);
         }
 
         Object.assign(store, attrs);
@@ -36,7 +36,7 @@ export class StoresService {
         const store = await this.findOneById(storeId); 
         
         if (!store) { 
-            throw new Error(`Loja com ID ${storeId} não encontrada`); 
+            throw new NotFoundException(`Loja com ID ${storeId} não encontrada`); 
         } 
         
         return this.repo.remove(store); 

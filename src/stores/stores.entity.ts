@@ -42,7 +42,7 @@ export class Store {
 
     @IsString()
     @Column()
-    teleponeNumber: string;
+    telephoneNumber: string;
 
     @IsEmail()
     @Column()
