@@ -49,11 +49,11 @@ export class Store {
     emailAddress: string;
 
     @IsString()
-    @Column("decimal")
+    @Column({ nullable: true })
     latitude: string;
 
     @IsString()
-    @Column("decimal")
+    @Column({ nullable: true })
     longitude: string;
 
     @IsString()

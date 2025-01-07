@@ -3,13 +3,15 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './stores.entity';
 import { CreateStoreDto } from './dtos/create-store.dto';
-import { ViaCepService } from 'src/services/viacep.service';
+import { ViaCepService } from 'src/services/viacep/viacep.service';
+import { GeocodingService } from 'src/services/geocoding/geocoding.service';
 
 @Injectable()
 export class StoresService {
     constructor(
         @InjectRepository(Store) private repo: Repository<Store>,
-        private viaCepService: ViaCepService
+        private viaCepService: ViaCepService,
+        private geocodingService: GeocodingService
     ){}
 
     async create(storeDto: CreateStoreDto): Promise<Store> {
@@ -24,6 +26,12 @@ export class StoresService {
                 storeDto.address1 = address.address1
             }
 
+            const coordinates = await this.geocodingService.getCoordinatesByAddress(storeDto.postalCode);
+
+            if(coordinates){
+                storeDto.latitude = coordinates.latitude;
+                storeDto.longitude = coordinates.longitude;
+            }
         }
 
         const store = this.repo.create(storeDto);
@@ -54,8 +62,12 @@ export class StoresService {
                 attrs.state = address.state,
                 attrs.address1 = address.address1
             }
-            else{
-                throw new Error(`Endereço não encontrado para o CEP: ${attrs.postalCode}`);
+
+            const coordinates = await this.geocodingService.getCoordinatesByAddress(attrs.postalCode);
+
+            if(coordinates){
+                attrs.latitude = coordinates.latitude;
+                attrs.longitude = coordinates.longitude;
             }
         }
 
