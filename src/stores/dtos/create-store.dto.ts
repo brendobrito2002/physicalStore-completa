@@ -34,10 +34,12 @@ export class CreateStoreDto {
     emailAddress: string;
 
     @IsString()
-    latitude: string;
+    @IsOptional()
+    latitude?: string;
 
     @IsString()
-    longitude: string;
+    @IsOptional()
+    longitude?: string;
 
     @IsString()
     @IsOptional()
