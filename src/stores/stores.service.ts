@@ -45,6 +45,10 @@ export class StoresService {
     async findOneById(storeId: string): Promise<Store | null> {
         return this.repo.findOneBy({ storeId });
     }
+
+    async findAllStoreByState(state: string): Promise<Store[]> {
+        return this.repo.find({ where: {state: state}});
+    }
     
     async update(storeId: string, attrs: Partial<Store>){
         const store = await this.findOneById(storeId);
