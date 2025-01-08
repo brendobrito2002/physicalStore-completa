@@ -36,6 +36,13 @@ export class StoresController {
     }
 
     @Serialize(StoreResponseDto)
+    @Get('/search/:state')
+    async findAllStoreByState(@Param('state') state: string){
+        const stores = await this.storesService.findAllStoreByState(state);
+        return stores;
+    }
+
+    @Serialize(StoreResponseDto)
     @Patch('/:storeId')
     async updateStore(@Param('storeId') storeId: string, @Body() body: UpdateStoreDto){
         const store = await this.storesService.update(storeId, body);
