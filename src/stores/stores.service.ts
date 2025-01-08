@@ -26,7 +26,7 @@ export class StoresService {
                 storeDto.address1 = address.address1
             }
 
-            const coordinates = await this.geocodingService.getCoordinatesByAddress(storeDto.postalCode);
+            const coordinates = await this.geocodingService.getCoordinates(storeDto.postalCode, storeDto.address1, storeDto.country);
 
             if(coordinates){
                 storeDto.latitude = coordinates.latitude;
@@ -63,7 +63,7 @@ export class StoresService {
                 attrs.address1 = address.address1
             }
 
-            const coordinates = await this.geocodingService.getCoordinatesByAddress(attrs.postalCode);
+            const coordinates = await this.geocodingService.getCoordinates(attrs.postalCode, attrs.address1, attrs.country);
 
             if(coordinates){
                 attrs.latitude = coordinates.latitude;
