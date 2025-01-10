@@ -17,7 +17,7 @@ export class ViaCepService {
                 city: data.localidade,
                 district: data.bairro,
                 state: data.estado,
-                address1: data.logradouro
+                address: data.logradouro
             }
 
         } catch(error) {

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, NotFoundException, Param, Patch, Delete, HttpCode} from '@nestjs/common';
+import { Body, Controller, Post, Get, NotFoundException, Param, Patch, Delete, HttpCode, Query} from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { CreateStoreDto } from './dtos/create-store.dto';
 import { UpdateStoreDto } from './dtos/update-store.dto';
@@ -18,47 +18,58 @@ export class StoresController {
 
     @Serialize(StoreResponseDto)
     @Get('/')
-    async findAllStore() {
+    async listAll() {
         const stores = await this.storesService.findAll();
         return stores;
     }
 
     @Serialize(StoreResponseDto)
-    @Get('/:storeId')
-    async findOneStoreById(@Param('storeId') storeId: string) {
-        const store = await this.storesService.findOneById(storeId);
+    @Get('/:storeID')
+    async storeById(@Param('storeID') storeID: string) {
+        const store = await this.storesService.findOneById(storeID);
 
         if (!store) {
-        throw new NotFoundException(`Loja com ID: ${storeId} não encontrada`);
+        throw new NotFoundException(`Loja com ID: ${storeID} não encontrada`);
         }
 
         return store;
     }
 
     @Serialize(StoreResponseDto)
-    @Get('/search/:state')
-    async findAllStoreByState(@Param('state') state: string){
+    @Get('/storeByState/:state')
+    async storeByState(@Param('state') state: string){
         const stores = await this.storesService.findAllStoreByState(state);
         return stores;
     }
 
     @Serialize(StoreResponseDto)
-    @Patch('/:storeId')
-    async updateStore(@Param('storeId') storeId: string, @Body() body: UpdateStoreDto){
-        const store = await this.storesService.update(storeId, body);
+    @Patch('/:storeID')
+    async updateStore(@Param('storeID') storeID: string, @Body() body: UpdateStoreDto){
+        const store = await this.storesService.update(storeID, body);
         return store;
     }
 
-    @Delete('/:storeId')
+    @Delete('/:storeID')
     @HttpCode(204)
-    async removeStore(@Param('storeId') storeId: string) {
-      const store = await this.storesService.findOneById(storeId);
+    async removeStore(@Param('storeID') storeID: string) {
+      const store = await this.storesService.findOneById(storeID);
     
       if (!store) {
-        throw new NotFoundException(`Loja com ID: ${storeId} não encontrada`);
+        throw new NotFoundException(`Loja com ID: ${storeID} não encontrada`);
       }
     
-      await this.storesService.remove(storeId);
+      await this.storesService.remove(storeID);
     }
+
+    @Get('/storeByCep/:postalCode')
+    async storeByCep(@Param('postalCode') postalCode: string) {
+        const result = await this.storesService.storeByCep(postalCode);
+    
+        if (!result.stores.length) {
+            throw new NotFoundException(`Nenhuma loja ou PDV próximo ao CEP ${postalCode} encontrado`);
+        }
+    
+        return result;
+    }    
     
 }

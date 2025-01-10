@@ -1,5 +1,4 @@
 import { IsBoolean, IsEmail, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
-import { StoreType } from "../stores.entity";
 
 export class CreateStoreDto {
     @IsString()
@@ -11,14 +10,14 @@ export class CreateStoreDto {
 
     @IsString()
     @IsOptional()
-    district?: string; // bairro
+    district?: string;
 
     @IsString()
     @IsOptional()
     state?: string;
 
-    @IsEnum(StoreType, { message: 'O tipo deve ser PDV ou Loja' })
-    type: StoreType; // PDV | Loja
+    @IsString()
+    type: string; // PDV | LOJA
 
     @IsString()
     @IsOptional()
@@ -28,10 +27,12 @@ export class CreateStoreDto {
     postalCode: string;
 
     @IsString()
-    telephoneNumber: string;
+    @IsOptional()
+    telephoneNumber?: string;
 
     @IsEmail()
-    emailAddress: string;
+    @IsOptional()
+    emailAddress?: string;
 
     @IsString()
     @IsOptional()
@@ -43,19 +44,11 @@ export class CreateStoreDto {
 
     @IsString()
     @IsOptional()
-    address1?: string;
-
-    @IsOptional()
-    @IsString()
-    address2?: string;
-
-    @IsOptional()
-    @IsString()
-    address3?: string;
+    address?: string;
 
     @IsBoolean()
     @IsOptional()
-    takeOutInStore?: boolean; // sempre tem produto
+    takeOutInStore?: true; // sempre tem produto
 
     @IsNumber()
     shippingTimeInDays: number; // considerar tempo de preparo
