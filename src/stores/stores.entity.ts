@@ -1,16 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, AfterInsert, AfterUpdate, AfterRemove } from "typeorm";
 import { IsString, IsBoolean, IsNumber, IsEmail } from "class-validator";
 
-export enum StoreType {
-    PDV = 'PDV',
-    LOJA = 'Loja',
-}
-
 @Entity()
 export class Store {
     @IsString()
     @PrimaryGeneratedColumn()
-    storeId: string;
+    storeID: string;
 
     @IsString()
     @Column()
@@ -22,15 +17,15 @@ export class Store {
 
     @IsString()
     @Column()
-    district: string; // bairro
+    district: string;
 
     @IsString()
     @Column()
     state: string;
 
     @IsString()
-    @Column({ type: 'text' })
-    type: StoreType;
+    @Column()
+    type: string;
 
     @IsString()
     @Column({ default: 'Brasil' })
@@ -58,15 +53,7 @@ export class Store {
 
     @IsString()
     @Column()
-    address1: string;
-
-    @IsString()
-    @Column({ nullable: true })
-    address2: string | null;
-
-    @IsString()
-    @Column({ nullable: true })
-    address3: string | null;
+    address: string;
 
     @IsBoolean()
     @Column({ default: true })
@@ -78,16 +65,16 @@ export class Store {
 
     @AfterInsert()
     logInsert() {
-        console.log('Inserido Loja com ID: ', this.storeId);
+        console.log('Inserido Loja com ID: ', this.storeID);
     }
 
     @AfterUpdate()
     logUpdate() {
-        console.log('Atualizada Loja com ID: ', this.storeId);
+        console.log('Atualizada Loja com ID: ', this.storeID);
     }
 
     @AfterRemove()
     logRemove() {
-        console.log('Removida Loja com ID: ', this.storeId);
+        console.log('Removida Loja com ID: ', this.storeID);
     }
 }

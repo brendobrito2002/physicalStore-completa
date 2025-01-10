@@ -1,9 +1,8 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { StoreType } from '../stores.entity';
+import { Expose } from 'class-transformer';
 
 export class StoreResponseDto {
-  @Expose() // @Exclude()
-  storeId: string;
+  @Expose()
+  storeID: string;
 
   @Expose()
   storeName: string;
@@ -18,7 +17,7 @@ export class StoreResponseDto {
   state: string;
 
   @Expose()
-  type: StoreType;
+  type: string;
 
   @Expose()
   country: string;
@@ -39,16 +38,10 @@ export class StoreResponseDto {
   longitude: string;
 
   @Expose()
-  address1: string;
+  address: string;
 
   @Expose()
-  address2: string;
-
-  @Expose()
-  address3: string;
-
-  @Expose()
-  takeOutInStore: boolean;
+  takeOutInStore: true;
 
   @Expose()
   shippingTimeInDays: number;

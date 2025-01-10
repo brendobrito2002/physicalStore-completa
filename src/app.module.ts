@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { StoresModule } from './stores/stores.module';
 import { Store } from './stores/stores.entity';
 import { DataSourceOptions } from 'typeorm';
+import { DistanceMatrixService } from './services/distance-matrix.service.ts/distance-matrix.service.ts.service';
+import { CorreiosService } from './services/correios/correios.service';
 
 @Module({
   imports: [
@@ -25,6 +27,6 @@ import { DataSourceOptions } from 'typeorm';
     StoresModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, DistanceMatrixService, CorreiosService],
 })
 export class AppModule {}
