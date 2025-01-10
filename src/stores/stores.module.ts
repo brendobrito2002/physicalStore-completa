@@ -5,7 +5,7 @@ import { StoresService } from './stores.service';
 import { Store } from './stores.entity';
 import { ViaCepService } from 'src/services/viacep/viacep.service';
 import { GeocodingService } from 'src/services/geocoding/geocoding.service';
-import { DistanceMatrixService } from 'src/services/distance-matrix.service.ts/distance-matrix.service.ts.service';
+import { DistanceMatrixService } from 'src/services/distance-matrix/distance-matrix.service';
 import { CorreiosService } from 'src/services/correios/correios.service';
 
 @Module({
@@ -13,4 +13,4 @@ import { CorreiosService } from 'src/services/correios/correios.service';
   controllers: [StoresController],
   providers: [StoresService, ViaCepService, GeocodingService, DistanceMatrixService, CorreiosService]
 })
-export class StoresModule {}
+export class StoresModule { }
