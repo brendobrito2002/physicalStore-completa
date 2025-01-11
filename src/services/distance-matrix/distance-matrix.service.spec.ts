@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DistanceMatrixService } from './distance-matrix.service'; 
+import { DistanceMatrixService } from './distance-matrix.service';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { ConfigService } from '@nestjs/config';
@@ -65,4 +65,47 @@ describe('DistanceMatrixService', () => {
     ).rejects.toThrow('As coordenadas fornecidas são inválidas.');
   });
 
+  it('should throw an error when API returns no results', async () => {
+    const originLat = '40.712776';
+    const originLng = '-74.005974';
+    const destinationLat = '34.052235';
+    const destinationLng = '-118.243683';
+
+    const responseMock = {
+      rows: [
+        {
+          elements: [
+            {
+              status: 'ZERO_RESULTS',
+            },
+          ],
+        },
+      ],
+    };
+
+    mock
+      .onGet('https://maps.googleapis.com/maps/api/distancematrix/json')
+      .reply(200, responseMock);
+
+    await expect(
+      service.calculateDistance(originLat, originLng, destinationLat, destinationLng),
+    ).rejects.toThrow('Erro na resposta da API: ZERO_RESULTS');
+  });
+  
+  it('should throw an error when API returns an error', async () => {
+    const originLat = '40.712776';
+    const originLng = '-74.005974';
+    const destinationLat = '34.052235';
+    const destinationLng = '-118.243683';
+
+    mock
+      .onGet('https://maps.googleapis.com/maps/api/distancematrix/json')
+      .reply(400, {
+        error_message: 'Invalid request. Missing the "key" parameter.',
+      });
+
+    await expect(
+      service.calculateDistance(originLat, originLng, destinationLat, destinationLng),
+    ).rejects.toThrow('Erro ao calcular distância: Invalid request. Missing the "key" parameter.');
+  });
 });
