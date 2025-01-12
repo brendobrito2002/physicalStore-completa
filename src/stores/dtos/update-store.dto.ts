@@ -19,7 +19,7 @@ export class UpdateStoreDto {
 
     @IsString()
     @IsOptional()
-    type?: string; // PDV | LOJA
+    type?: string;
 
     @IsString()
     @IsOptional()
@@ -43,9 +43,9 @@ export class UpdateStoreDto {
 
     @IsBoolean()
     @IsOptional()
-    takeOutInStore?: true; // sempre tem produto
+    takeOutInStore?: true;
 
     @IsNumber()
     @IsOptional()
-    shippingTimeInDays?: number; // considerar tempo de preparo
+    shippingTimeInDays?: number;
 }

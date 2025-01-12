@@ -57,11 +57,11 @@ export class Store {
 
     @IsBoolean()
     @Column({ default: true })
-    takeOutInStore: boolean; // sempre tem produto
+    takeOutInStore: boolean;
 
     @IsNumber()
     @Column("int")
-    shippingTimeInDays: number; // considerar tempo de preparo
+    shippingTimeInDays: number;
 
     @AfterInsert()
     logInsert() {

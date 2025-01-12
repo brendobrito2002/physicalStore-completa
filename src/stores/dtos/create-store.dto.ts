@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateStoreDto {
     @IsString()
@@ -17,7 +17,7 @@ export class CreateStoreDto {
     state?: string;
 
     @IsString()
-    type: string; // PDV | LOJA
+    type: string;
 
     @IsString()
     @IsOptional()
@@ -48,8 +48,8 @@ export class CreateStoreDto {
 
     @IsBoolean()
     @IsOptional()
-    takeOutInStore?: true; // sempre tem produto
+    takeOutInStore?: true;
 
     @IsNumber()
-    shippingTimeInDays: number; // considerar tempo de preparo
+    shippingTimeInDays: number;
 }
