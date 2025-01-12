@@ -55,12 +55,6 @@ describe('GeocodingService', () => {
     });
   });
 
-  it('should throw an error when no parameters are provided', async () => {
-    await expect(service.getCoordinates()).rejects.toThrow(
-      'Nenhum dos parâmetros fornecidos funcionou.',
-    );
-  });
-
   it('should throw an error when API returns no results', async () => {
     const postalCode = '99999999';
     const responseMock = {

@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
+import { COUNTRY } from '../../stores/constants/store.constants';
 
 @Injectable()
 export class GeocodingService {
     private readonly geocodingBaseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 
-    constructor(private configService: ConfigService) {}
+    constructor(private configService: ConfigService) { }
 
     async getCoordinates(postalCode?: string, address?: string, country?: string): Promise<{ latitude: string, longitude: string }> {
         try {
             const apiKey = this.configService.get<string>('GEOCODING_API_KEY');
+            country = COUNTRY;
 
             if (!apiKey) {
                 throw new Error('Chave de API não está funcionando.');

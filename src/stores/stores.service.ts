@@ -3,43 +3,35 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './stores.entity';
 import { CreateStoreDto } from './dtos/create-store.dto';
-import { ViaCepService } from 'src/services/viacep/viacep.service';
 import { GeocodingService } from 'src/services/geocoding/geocoding.service';
 import { DistanceMatrixService } from 'src/services/distance-matrix/distance-matrix.service';
-import { CorreiosService } from 'src/services/correios/correios.service';
+import { StoreType } from 'src/stores/constants/store.constants';
+import { AddressCoordinatesService } from './utils/address-coordinates.service';
+import { DeliveryOptionsService } from './utils/delivery-options.service';
 
 @Injectable()
 export class StoresService {
     constructor(
         @InjectRepository(Store) private repo: Repository<Store>,
-        private viaCepService: ViaCepService,
         private geocodingService: GeocodingService,
         private distanceService: DistanceMatrixService,
-        private correiosService: CorreiosService
+        private addressCoordinatesService: AddressCoordinatesService,
+        private deliveryOptionsService: DeliveryOptionsService
     ) { }
 
     async create(storeDto: CreateStoreDto): Promise<Store> {
-
-        if (storeDto.type != 'LOJA' && storeDto.type != 'PDV') {
-            throw new Error('A loja deve ser do tipo LOJA ou PDV');
+        if (storeDto.type !== StoreType.LOJA && storeDto.type !== StoreType.PDV) {
+            throw new Error(`A loja deve ser do tipo ${StoreType.LOJA} ou ${StoreType.PDV}`);
         }
+        console.log(storeDto.country)
 
         if (storeDto.postalCode) {
-            const address = await this.viaCepService.getAddressByCep(storeDto.postalCode);
-
-            if (address) {
-                storeDto.city = address.city,
-                    storeDto.district = address.district,
-                    storeDto.state = address.state,
-                    storeDto.address = address.address
-            }
-
-            const coordinates = await this.geocodingService.getCoordinates(storeDto.postalCode, storeDto.address, storeDto.country);
-
-            if (coordinates) {
-                storeDto.latitude = coordinates.latitude;
-                storeDto.longitude = coordinates.longitude;
-            }
+            const enrichedData = await this.addressCoordinatesService.enrichAddress(
+                storeDto.postalCode,
+                storeDto.address,
+                storeDto.country,
+            );
+            Object.assign(storeDto, enrichedData);
         }
 
         const store = this.repo.create(storeDto);
@@ -66,21 +58,12 @@ export class StoresService {
         }
 
         if (attrs.postalCode) {
-            const address = await this.viaCepService.getAddressByCep(attrs.postalCode);
-
-            if (address) {
-                attrs.city = address.city,
-                    attrs.district = address.district,
-                    attrs.state = address.state,
-                    attrs.address = address.address
-            }
-
-            const coordinates = await this.geocodingService.getCoordinates(attrs.postalCode, attrs.address, attrs.country);
-
-            if (coordinates) {
-                attrs.latitude = coordinates.latitude;
-                attrs.longitude = coordinates.longitude;
-            }
+            const enrichedData = await this.addressCoordinatesService.enrichAddress(
+                attrs.postalCode,
+                attrs.address,
+                attrs.country,
+            );
+            Object.assign(attrs, enrichedData);
         }
 
         Object.assign(store, attrs);
@@ -109,6 +92,16 @@ export class StoresService {
         const storeResponses = await Promise.all(
             stores.map(async (store) => {
                 try {
+                    const deliveryOptions = await this.deliveryOptionsService.calculateDeliveryOptions(
+                        store.type,
+                        originCoordinates.latitude,
+                        originCoordinates.longitude,
+                        store.latitude,
+                        store.longitude,
+                        store.postalCode,
+                        postalCode,
+                    );
+
                     const distance = await this.distanceService.calculateDistance(
                         originCoordinates.latitude,
                         originCoordinates.longitude,
@@ -116,56 +109,19 @@ export class StoresService {
                         store.longitude,
                     );
 
-                    const distanceInKm = parseFloat(distance.toFixed(2));
-
-                    const pin = {
-                        position: { lat: store.latitude, lng: store.longitude },
-                        title: store.storeName,
-                    };
-
-                    let deliveryOptions: any[] = [];
-
-                    if (store.type === 'PDV') {
-                        if (distanceInKm <= 50) {
-                            deliveryOptions.push({
-                                prazo: "1 dia(s) úteis",
-                                price: "R$ 15,00",
-                                description: "Motoboy",
-                            });
-                        } else {
-                            deliveryOptions.push({
-                                description: "Sem entrega disponível para distâncias acima de 50km",
-                            });
-                        }
-                    } else if (store.type === 'LOJA') {
-                        if (distanceInKm <= 50) {
-                            deliveryOptions.push({
-                                prazo: "1 dia(s) úteis",
-                                price: "R$ 15,00",
-                                description: "Motoboy",
-                            });
-                        } else {
-                            const shippingOptions = await this.correiosService.calculateShipping(
-                                postalCode,
-                                store.postalCode,
-                                "20",
-                                "15",
-                                "10"
-                            );
-                            deliveryOptions = shippingOptions;
-                        }
-                    }
-
                     return {
                         storeData: {
                             name: store.storeName,
                             city: store.city,
                             postalCode: store.postalCode,
                             type: store.type,
-                            distance: `${distanceInKm} km`,
+                            distance: `${distance} km`,
                             value: deliveryOptions,
                         },
-                        pin,
+                        pin: {
+                            position: { lat: store.latitude, lng: store.longitude },
+                            title: store.storeName,
+                        },
                     };
                 } catch (error) {
                     console.error(`Erro ao processar loja ${store.storeName}: ${error.message}`);
@@ -187,4 +143,4 @@ export class StoresService {
             pins,
         };
     }
-}    
+} 
