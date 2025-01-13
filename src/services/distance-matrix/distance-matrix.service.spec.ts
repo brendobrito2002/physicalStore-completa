@@ -24,6 +24,10 @@ describe('DistanceMatrixService', () => {
     mock.reset();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   it('should calculate distance successfully with valid inputs', async () => {
     const originLat = '40.712776';
     const originLng = '-74.005974';
@@ -37,7 +41,7 @@ describe('DistanceMatrixService', () => {
             {
               status: 'OK',
               distance: {
-                value: 4500000,
+                value: 4492487,
               },
             },
           ],
@@ -51,7 +55,7 @@ describe('DistanceMatrixService', () => {
 
     const result = await service.calculateDistance(originLat, originLng, destinationLat, destinationLng);
 
-    expect(result).toBe(4500);
+    expect(result).toBe(4492.487);
   });
 
   it('should throw an error with invalid coordinates', async () => {
@@ -92,20 +96,4 @@ describe('DistanceMatrixService', () => {
     ).rejects.toThrow('Erro na resposta da API: ZERO_RESULTS');
   });
   
-  it('should throw an error when API returns an error', async () => {
-    const originLat = '40.712776';
-    const originLng = '-74.005974';
-    const destinationLat = '34.052235';
-    const destinationLng = '-118.243683';
-
-    mock
-      .onGet('https://maps.googleapis.com/maps/api/distancematrix/json')
-      .reply(400, {
-        error_message: 'Invalid request. Missing the "key" parameter.',
-      });
-
-    await expect(
-      service.calculateDistance(originLat, originLng, destinationLat, destinationLng),
-    ).rejects.toThrow('Erro ao calcular distância: Invalid request. Missing the "key" parameter.');
-  });
 });

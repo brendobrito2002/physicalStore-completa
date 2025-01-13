@@ -3,27 +3,29 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './stores.entity';
 import { CreateStoreDto } from './dtos/create-store.dto';
-import { GeocodingService } from 'src/services/geocoding/geocoding.service';
-import { DistanceMatrixService } from 'src/services/distance-matrix/distance-matrix.service';
-import { StoreType } from 'src/stores/constants/store.constants';
+import { GeocodingService } from './../services/geocoding/geocoding.service';
+import { DistanceMatrixService } from './../services/distance-matrix/distance-matrix.service';
+import { StoreType } from './../stores/constants/store.constants';
 import { AddressCoordinatesService } from './utils/address-coordinates.service';
 import { DeliveryOptionsService } from './utils/delivery-options.service';
 
 @Injectable()
 export class StoresService {
+    static geocodingService(geocodingService: any, arg1: string) {
+      throw new Error('Method not implemented.');
+    }
     constructor(
         @InjectRepository(Store) private repo: Repository<Store>,
-        private geocodingService: GeocodingService,
-        private distanceService: DistanceMatrixService,
-        private addressCoordinatesService: AddressCoordinatesService,
-        private deliveryOptionsService: DeliveryOptionsService
+        public geocodingService: GeocodingService,
+        public distanceService: DistanceMatrixService,
+        public addressCoordinatesService: AddressCoordinatesService,
+        public deliveryOptionsService: DeliveryOptionsService
     ) { }
 
     async create(storeDto: CreateStoreDto): Promise<Store> {
         if (storeDto.type !== StoreType.LOJA && storeDto.type !== StoreType.PDV) {
             throw new Error(`A loja deve ser do tipo ${StoreType.LOJA} ou ${StoreType.PDV}`);
         }
-        console.log(storeDto.country)
 
         if (storeDto.postalCode) {
             const enrichedData = await this.addressCoordinatesService.enrichAddress(

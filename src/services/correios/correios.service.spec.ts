@@ -30,11 +30,17 @@ describe('CorreiosService', () => {
 
     const responseMock = [
       {
-        prazo: '3 dias úteis',
-        codProdutoAgencia: '40010',
-        precoPPN: 'R$ 50,00',
-        urlTitulo: 'SEDEX',
+        prazo: '1 dia útil',
+        codProdutoAgencia: '04014',
+        precoPPN: 'R$ 9,98',
+        urlTitulo: 'Sedex a encomenda expressa dos Correios',
       },
+      {
+        prazo: '5 dias úteis',
+        codProdutoAgencia: '04510',
+        precoPPN: 'R$ 15,33',
+        urlTitulo: 'PAC a encomenda economica dos Correios',
+      }
     ];
 
     mock.onPost('https://www.correios.com.br/@@precosEPrazosView').reply(200, responseMock);
@@ -49,11 +55,17 @@ describe('CorreiosService', () => {
 
     expect(result).toEqual([
       {
-        prazo: '3 dias úteis',
-        codProdutoAgencia: '40010',
-        price: 'R$ 50,00',
-        description: 'SEDEX',
+        prazo: '1 dia útil',
+        codProdutoAgencia: '04014',
+        price: 'R$ 9,98',
+        description: 'Sedex a encomenda expressa dos Correios',
       },
+      {
+        prazo: '5 dias úteis',
+        codProdutoAgencia: '04510',
+        price: 'R$ 15,33',
+        description: 'PAC a encomenda economica dos Correios',
+      }
     ]);
   });
 
