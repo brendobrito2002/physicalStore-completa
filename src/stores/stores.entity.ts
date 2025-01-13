@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, AfterInsert, AfterUpdate, AfterRemove } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { IsString, IsBoolean, IsNumber, IsEmail } from "class-validator";
 
 @Entity()
@@ -63,18 +63,4 @@ export class Store {
     @Column("int")
     shippingTimeInDays: number;
 
-    @AfterInsert()
-    logInsert() {
-        console.log('Inserido Loja com ID: ', this.storeID);
-    }
-
-    @AfterUpdate()
-    logUpdate() {
-        console.log('Atualizada Loja com ID: ', this.storeID);
-    }
-
-    @AfterRemove()
-    logRemove() {
-        console.log('Removida Loja com ID: ', this.storeID);
-    }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ViaCepService } from 'src/services/viacep/viacep.service';
-import { GeocodingService } from 'src/services/geocoding/geocoding.service';
+import { ViaCepService } from '../../services/viacep/viacep.service';
+import { GeocodingService } from '../../services/geocoding/geocoding.service';
+import { COUNTRY } from '../constants/store.constants';
 
 @Injectable()
 export class AddressCoordinatesService {
@@ -11,6 +12,7 @@ export class AddressCoordinatesService {
 
     async enrichAddress(postalCode: string, address?: string, country?: string): Promise<any> {
         const enrichedData: Partial<any> = {};
+        country = COUNTRY;
 
         const cepData = await this.viaCepService.getAddressByCep(postalCode);
         if (cepData) {

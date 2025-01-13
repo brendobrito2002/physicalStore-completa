@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DistanceMatrixService } from 'src/services/distance-matrix/distance-matrix.service';
-import { CorreiosService } from 'src/services/correios/correios.service';
-import { StoreType, DEFAULT_SHIPPING_DIMENSIONS, DELIVERY_DISTANCE_LIMIT, DELIVERY_PRICE, DELIVERY_TIME, DELIVERY_METHOD } from 'src/stores/constants/store.constants';
+import { DistanceMatrixService } from '../../services/distance-matrix/distance-matrix.service';
+import { CorreiosService } from '../../services/correios/correios.service';
+import { StoreType, DEFAULT_SHIPPING_DIMENSIONS, DELIVERY_DISTANCE_LIMIT, DELIVERY_PRICE, DELIVERY_TIME, DELIVERY_METHOD } from '../../stores/constants/store.constants';
 
 @Injectable()
 export class DeliveryOptionsService {

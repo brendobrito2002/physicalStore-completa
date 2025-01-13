@@ -29,7 +29,6 @@ export class CorreiosService {
                     description: item.urlTitulo
                 }));
             }
-            console.log(response.data.price);
 
             throw new Error('Erro na resposta da API dos correios');
         }catch(error){
